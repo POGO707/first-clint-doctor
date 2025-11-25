@@ -4,8 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dr. Saurav Bhakat | Emergency & Diabetes Care</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Configuration -->
     <script>
       tailwind.config = {
         theme: {
@@ -20,11 +26,11 @@
                 100: '#dbeafe',
                 500: '#3b82f6',
                 600: '#2563eb',
-                700: '#1d4ed8', // Trustworthy Blue
+                700: '#1d4ed8',
                 900: '#1e3a8a',
               },
               accent: {
-                500: '#14b8a6', // Medical Teal
+                500: '#14b8a6',
                 600: '#0d9488',
               }
             },
@@ -35,8 +41,6 @@
               'slide-down': 'slideDown 0.3s ease-out forwards',
               'bounce-slow': 'bounce 3s infinite',
               'spin-slow': 'spin 4s linear infinite',
-              'ken-burns': 'kenburns 20s ease-in-out infinite alternate',
-              'pulse-glow': 'pulseGlow 3s infinite',
             },
             keyframes: {
               fadeInUp: {
@@ -54,34 +58,77 @@
               slideDown: {
                 '0%': { transform: 'translateY(-20px)', opacity: '0' },
                 '100%': { transform: 'translateY(0)', opacity: '1' },
-              },
-              kenburns: {
-                '0%': { transform: 'scale(1)' },
-                '100%': { transform: 'scale(1.15)' },
-              },
-              pulseGlow: {
-                '0%, 100%': { boxShadow: '0 0 0 0 rgba(20, 184, 166, 0.4)' },
-                '50%': { boxShadow: '0 0 25px 5px rgba(20, 184, 166, 0.6)' },
               }
             }
           }
         }
       }
     </script>
-  <script type="importmap">
-{
-  "imports": {
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0"
-  }
-}
-</script>
-</head>
-  <body>
+    
+    <!-- Import Maps for ES Modules -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+          "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+          "react/": "https://aistudiocdn.com/react@^19.2.0/",
+          "react": "https://aistudiocdn.com/react@^19.2.0",
+          "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0"
+        }
+      }
+    </script>
+    
+    <!-- Custom CSS -->
+    <style>
+      /* Additional custom styles if needed */
+      .delay-100 { animation-delay: 100ms; }
+      .delay-200 { animation-delay: 200ms; }
+      .delay-300 { animation-delay: 300ms; }
+      
+      /* Ensure smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+      
+      /* Hide scrollbar for Chrome, Safari and Opera */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      
+      /* Hide scrollbar for IE, Edge and Firefox */
+      .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+      }
+    </style>
+  </head>
+  
+  <body class="bg-white">
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    
+    <!-- Main React App Script -->
+    <script type="module">
+      import React from 'react';
+      import ReactDOM from 'react-dom/client';
+      import App from './App';
+      
+      // Wait for DOM to be fully loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        const rootElement = document.getElementById('root');
+        if (!rootElement) {
+          console.error('Root element not found');
+          return;
+        }
+        
+        try {
+          const root = ReactDOM.createRoot(rootElement);
+          root.render(React.createElement(React.StrictMode, null, 
+            React.createElement(App)
+          ));
+        } catch (error) {
+          console.error('Error rendering React app:', error);
+        }
+      });
+    </script>
   </body>
 </html>

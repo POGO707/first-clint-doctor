@@ -1,134 +1,496 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth scroll-pt-28">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dr. Saurav Bhakat | Emergency & Diabetes Care</title>
-    
-    <!-- Tailwind CSS -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Saurav Bhakat - Emergency & Diabetes Care</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind Configuration -->
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-              serif: ['Merriweather', 'serif'],
-            },
-            colors: {
-              primary: {
-                50: '#eff6ff',
-                100: '#dbeafe',
-                500: '#3b82f6',
-                600: '#2563eb',
-                700: '#1d4ed8',
-                900: '#1e3a8a',
-              },
-              accent: {
-                500: '#14b8a6',
-                600: '#0d9488',
-              }
-            },
-            animation: {
-              'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
-              'fade-in': 'fadeIn 0.5s ease-out forwards',
-              'slide-up': 'slideUp 0.5s ease-out forwards',
-              'slide-down': 'slideDown 0.3s ease-out forwards',
-              'bounce-slow': 'bounce 3s infinite',
-              'spin-slow': 'spin 4s linear infinite',
-            },
-            keyframes: {
-              fadeInUp: {
-                '0%': { opacity: '0', transform: 'translateY(20px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
-              },
-              fadeIn: {
-                '0%': { opacity: '0' },
-                '100%': { opacity: '1' },
-              },
-              slideUp: {
-                '0%': { transform: 'translateY(100%)' },
-                '100%': { transform: 'translateY(0)' },
-              },
-              slideDown: {
-                '0%': { transform: 'translateY(-20px)', opacity: '0' },
-                '100%': { transform: 'translateY(0)', opacity: '1' },
-              }
-            }
-          }
-        }
-      }
-    </script>
-    
-    <!-- Import Maps for ES Modules -->
-    <script type="importmap">
-      {
-        "imports": {
-          "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-          "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-          "react/": "https://aistudiocdn.com/react@^19.2.0/",
-          "react": "https://aistudiocdn.com/react@^19.2.0",
-          "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0"
-        }
-      }
-    </script>
-    
-    <!-- Custom CSS -->
-    <style>
-      /* Additional custom styles if needed */
-      .delay-100 { animation-delay: 100ms; }
-      .delay-200 { animation-delay: 200ms; }
-      .delay-300 { animation-delay: 300ms; }
-      
-      /* Ensure smooth scrolling */
-      html {
-        scroll-behavior: smooth;
-      }
-      
-      /* Hide scrollbar for Chrome, Safari and Opera */
-      .no-scrollbar::-webkit-scrollbar {
-        display: none;
-      }
-      
-      /* Hide scrollbar for IE, Edge and Firefox */
-      .no-scrollbar {
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
-      }
-    </style>
-  </head>
-  
-  <body class="bg-white">
-    <div id="root"></div>
-    
-    <!-- Main React App Script -->
-    <script type="module">
-      import React from 'react';
-      import ReactDOM from 'react-dom/client';
-      import App from './App';
-      
-      // Wait for DOM to be fully loaded
-      document.addEventListener('DOMContentLoaded', function() {
-        const rootElement = document.getElementById('root');
-        if (!rootElement) {
-          console.error('Root element not found');
-          return;
-        }
-        
-        try {
-          const root = ReactDOM.createRoot(rootElement);
-          root.render(React.createElement(React.StrictMode, null, 
-            React.createElement(App)
-          ));
-        } catch (error) {
-          console.error('Error rendering React app:', error);
-        }
-      });
-    </script>
-  </body>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="font-sans">
+    <!-- Header -->
+    <header id="header" class="fixed w-full z-50 transition-all duration-300 bg-transparent py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="text-2xl font-serif font-bold text-white">
+                    Dr. Saurav Bhakat
+                </div>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="text-white hover:text-cyan-300 font-medium transition-colors">Home</a>
+                    <a href="#services" class="text-white hover:text-cyan-300 font-medium transition-colors">Services</a>
+                    <a href="#testimonials" class="text-white hover:text-cyan-300 font-medium transition-colors">Testimonials</a>
+                    <a href="#contact" class="text-white hover:text-cyan-300 font-medium transition-colors">Contact</a>
+                    <a href="tel:+919876543210" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors flex items-center gap-2">
+                        <i class="fas fa-phone"></i>
+                        Emergency
+                    </a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuButton" class="md:hidden text-white p-2">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden absolute top-full left-0 w-full bg-white shadow-lg py-4 px-4">
+                <a href="#home" class="block py-3 text-gray-800 font-medium border-b border-gray-100 hover:text-blue-600 transition-colors mobile-nav-link">Home</a>
+                <a href="#services" class="block py-3 text-gray-800 font-medium border-b border-gray-100 hover:text-blue-600 transition-colors mobile-nav-link">Services</a>
+                <a href="#testimonials" class="block py-3 text-gray-800 font-medium border-b border-gray-100 hover:text-blue-600 transition-colors mobile-nav-link">Testimonials</a>
+                <a href="#contact" class="block py-3 text-gray-800 font-medium border-b border-gray-100 hover:text-blue-600 transition-colors mobile-nav-link">Contact</a>
+                <a href="tel:+919876543210" class="block mt-4 bg-red-600 text-white py-3 px-4 rounded-lg font-semibold text-center transition-colors">
+                    <i class="fas fa-phone mr-2"></i>
+                    Call Emergency
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- WhatsApp Button -->
+    <button id="whatsappButton" class="fixed bottom-6 right-6 z-40 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition-all transform hover:scale-110">
+        <i class="fab fa-whatsapp text-xl"></i>
+    </button>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900">
+        <div class="absolute inset-0 bg-black/40"></div>
+        <div class="relative z-10 text-center text-white px-4 max-w-4xl">
+            <h1 class="text-4xl md:text-6xl font-serif font-bold mb-6 animate-fade-in-up">
+                Dr. Saurav Bhakat
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 text-blue-100 animate-fade-in-up">
+                Emergency Medicine & Diabetes Care Specialist
+            </p>
+            <p class="text-lg mb-12 text-blue-200 max-w-2xl mx-auto animate-fade-in-up">
+                Providing compassionate, expert medical care with over 5 years of experience in emergency medicine and diabetes management.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up">
+                <a href="#contact" class="bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-4 rounded-lg font-semibold transition-all transform hover:scale-105 flex items-center justify-center gap-2">
+                    Book Appointment <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="tel:+919876543210" class="border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 rounded-lg font-semibold transition-all flex items-center justify-center gap-2">
+                    <i class="fas fa-phone"></i> Emergency Call
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">Our Medical Services</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Comprehensive healthcare services tailored to meet your emergency and chronic care needs.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Emergency Care -->
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all p-6 border border-gray-100">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-ambulance text-blue-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Emergency & Acute Care</h3>
+                    <p class="text-gray-600 mb-4">Immediate medical attention for critical health situations and emergencies.</p>
+                    <ul class="space-y-2">
+                        <li class="flex items-center gap-2 text-sm text-gray-600">
+                            <i class="fas fa-check text-cyan-500"></i>
+                            24/7 Emergency Consultation
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-gray-600">
+                            <i class="fas fa-check text-cyan-500"></i>
+                            Critical Care Management
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-gray-600">
+                            <i class="fas fa-check text-cyan-500"></i>
+                            Trauma & Injury Treatment
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Diabetes Management -->
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all p-6 border border-gray-100">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-user-md text-blue-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Diabetes Management</h3>
+                    <p class="text-gray-600 mb-4">Comprehensive diabetes care and treatment plans for better health outcomes.</p>
+                    <ul class="space-y-2">
+                        <li class="flex items-center gap-2 text-sm text-gray-600">
+                            <i class="fas fa-check text-cyan-500"></i>
+                            Type 1 & Type 2 Diabetes Care
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-gray-600">
+                            <i class="fas fa-check text-cyan-500"></i>
+                            Blood Sugar Monitoring
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-gray-600">
+                            <i class="fas fa-check text-cyan-500"></i>
+                            Lifestyle Counseling
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Critical Care -->
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all p-6 border border-gray-100">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-heartbeat text-blue-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Critical Care Medicine</h3>
+                    <p class="text-gray-600 mb-4">Specialized intensive care for patients with life-threatening conditions.</p>
+                    <ul class="space-y-2">
+                        <li class="flex items-center gap-2 text-sm text-gray-600">
+                            <i class="fas fa-check text-cyan-500"></i>
+                            ICU Level Care
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-gray-600">
+                            <i class="fas fa-check text-cyan-500"></i>
+                            Ventilator Management
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-gray-600">
+                            <i class="fas fa-check text-cyan-500"></i>
+                            Sepsis Treatment
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Kidney Care -->
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all p-6 border border-gray-100">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-stethoscope text-blue-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Kidney Care</h3>
+                    <p class="text-gray-600 mb-4">Expert management of kidney disorders and related complications.</p>
+                    <ul class="space-y-2">
+                        <li class="flex items-center gap-2 text-sm text-gray-600">
+                            <i class="fas fa-check text-cyan-500"></i>
+                            Kidney Function Assessment
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-gray-600">
+                            <i class="fas fa-check text-cyan-500"></i>
+                            Dialysis Coordination
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-gray-600">
+                            <i class="fas fa-check text-cyan-500"></i>
+                            Chronic Kidney Disease Care
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20 bg-blue-900 text-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-serif font-bold mb-4">Patient Testimonials</h2>
+                <p class="text-blue-200">Hear what our patients have to say about their experience</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                    <div class="flex gap-1 mb-4">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                    <p class="text-white/90 italic mb-6">"Dr. Bhakat saved my life during a critical emergency. His quick response and expert care were remarkable."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-cyan-500 rounded-full flex items-center justify-center font-semibold">
+                            A
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Arindam G.</h4>
+                            <p class="text-blue-200 text-sm flex items-center gap-1">
+                                <i class="fas fa-map-marker-alt"></i> Barrackpore
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                    <div class="flex gap-1 mb-4">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                    <p class="text-white/90 italic mb-6">"Excellent diabetes management. My sugar levels are now under control after years of struggle."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-cyan-500 rounded-full flex items-center justify-center font-semibold">
+                            S
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Sujata D.</h4>
+                            <p class="text-blue-200 text-sm flex items-center gap-1">
+                                <i class="fas fa-map-marker-alt"></i> Anandapuri
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                    <div class="flex gap-1 mb-4">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                    <p class="text-white/90 italic mb-6">"Professional and compassionate care. The doctor explains everything clearly and listens patiently."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-cyan-500 rounded-full flex items-center justify-center font-semibold">
+                            R
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Rahul S.</h4>
+                            <p class="text-blue-200 text-sm flex items-center gap-1">
+                                <i class="fas fa-map-marker-alt"></i> Titagarh
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+                <p class="text-gray-600">Find answers to common questions about our services</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- FAQ 1 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-question w-full px-6 py-4 text-left bg-gray-50 hover:bg-gray-100 transition-colors flex justify-between items-center">
+                        <span class="font-semibold text-gray-900">Do you provide emergency services?</span>
+                        <i class="fas fa-chevron-down text-gray-400"></i>
+                    </button>
+                    <div class="faq-answer px-6 py-4 bg-white hidden">
+                        <p class="text-gray-700">Yes, we offer 24/7 emergency consultation services. For critical emergencies, please call directly for immediate assistance.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-question w-full px-6 py-4 text-left bg-gray-50 hover:bg-gray-100 transition-colors flex justify-between items-center">
+                        <span class="font-semibold text-gray-900">What are your consultation hours?</span>
+                        <i class="fas fa-chevron-down text-gray-400"></i>
+                    </button>
+                    <div class="faq-answer px-6 py-4 bg-white hidden">
+                        <p class="text-gray-700">We are available Monday to Saturday from 10 AM to 1 PM and 5 PM to 9 PM. Sunday appointments are for emergencies only.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-question w-full px-6 py-4 text-left bg-gray-50 hover:bg-gray-100 transition-colors flex justify-between items-center">
+                        <span class="font-semibold text-gray-900">Do I need an appointment?</span>
+                        <i class="fas fa-chevron-down text-gray-400"></i>
+                    </button>
+                    <div class="faq-answer px-6 py-4 bg-white hidden">
+                        <p class="text-gray-700">While walk-ins are accepted, we highly recommend booking an appointment to minimize waiting time and ensure dedicated consultation.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 4 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-question w-full px-6 py-4 text-left bg-gray-50 hover:bg-gray-100 transition-colors flex justify-between items-center">
+                        <span class="font-semibold text-gray-900">What insurance do you accept?</span>
+                        <i class="fas fa-chevron-down text-gray-400"></i>
+                    </button>
+                    <div class="faq-answer px-6 py-4 bg-white hidden">
+                        <p class="text-gray-700">We accept most major insurance providers. Please contact us with your insurance details for verification before your visit.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">Book Your Appointment</h2>
+                    <p class="text-gray-600">Get in touch with us for emergency care or scheduled consultations</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Contact Info -->
+                    <div class="bg-blue-900 text-white rounded-2xl p-8">
+                        <h3 class="text-2xl font-serif font-bold mb-8">Contact Information</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start gap-4">
+                                <i class="fas fa-map-marker-alt text-cyan-400 mt-1"></i>
+                                <div>
+                                    <h4 class="font-semibold mb-1">Clinic Address</h4>
+                                    <p class="text-blue-200">State Bank, Paul Pharmacy, Old Calcutta Rd, beside Anandapuri, Barrackpore, West Bengal 700123</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4">
+                                <i class="fas fa-phone text-cyan-400 mt-1"></i>
+                                <div>
+                                    <h4 class="font-semibold mb-1">Phone Number</h4>
+                                    <a href="tel:+919876543210" class="text-blue-200 hover:text-white transition-colors">
+                                        +91 98765 43210
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4">
+                                <i class="fas fa-clock text-cyan-400 mt-1"></i>
+                                <div>
+                                    <h4 class="font-semibold mb-1">Opening Hours</h4>
+                                    <p class="text-blue-200">Monday - Saturday: 10 AM - 1 PM, 5 PM - 9 PM</p>
+                                    <p class="text-blue-200">Sunday: Emergency Only</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 p-4 bg-red-600/20 border border-red-500/30 rounded-lg">
+                            <h4 class="font-semibold text-red-100 mb-2">Emergency Support</h4>
+                            <p class="text-red-200 text-sm mb-3">For urgent medical attention, call immediately</p>
+                            <a href="tel:+919876543210" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 w-full">
+                                <i class="fas fa-phone"></i> Call Emergency
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Appointment Form -->
+                    <div class="bg-white rounded-2xl p-8 shadow-lg">
+                        <h3 class="text-2xl font-serif font-bold text-gray-900 mb-6">Book Appointment</h3>
+                        
+                        <form id="appointmentForm" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name *</label>
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        required
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                                        placeholder="Enter your full name"
+                                    >
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Phone Number *</label>
+                                    <input
+                                        type="tel"
+                                        id="phone"
+                                        name="phone"
+                                        required
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                                        placeholder="+91 98765 43210"
+                                    >
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Reason for Visit</label>
+                                <select
+                                    id="reason"
+                                    name="reason"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                                >
+                                    <option>General Consultation</option>
+                                    <option>Emergency Care</option>
+                                    <option>Diabetes Management</option>
+                                    <option>Follow-up Visit</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Preferred Time Slot</label>
+                                <div class="relative">
+                                    <select
+                                        id="slot"
+                                        name="slot"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition appearance-none"
+                                    >
+                                        <option>Morning (10 AM - 1 PM)</option>
+                                        <option>Evening (5 PM - 9 PM)</option>
+                                    </select>
+                                    <i class="fas fa-calendar absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Additional Notes (Optional)</label>
+                                <textarea
+                                    id="notes"
+                                    name="notes"
+                                    rows="4"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                                    placeholder="Describe your symptoms or concerns..."
+                                ></textarea>
+                            </div>
+
+                            <button
+                                type="submit"
+                                id="submitBtn"
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                            >
+                                Confirm Appointment Request <i class="fas fa-arrow-right"></i>
+                            </button>
+
+                            <!-- Success Message -->
+                            <div id="successMessage" class="hidden text-center py-4">
+                                <i class="fas fa-check-circle text-green-500 text-4xl mb-4"></i>
+                                <h4 class="text-2xl font-bold text-green-800 mb-2">Appointment Request Sent!</h4>
+                                <p class="text-green-700 mb-6">We will call you shortly to confirm your appointment.</p>
+                                <button
+                                    onclick="resetForm()"
+                                    class="text-blue-600 hover:text-blue-800 font-semibold"
+                                >
+                                    Book Another Appointment
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <h3 class="text-2xl font-serif font-bold mb-4">Dr. Saurav Bhakat</h3>
+            <p class="text-gray-400 mb-6 max-w-md mx-auto">Emergency Medicine & Diabetes Care Specialist</p>
+            <div class="flex justify-center gap-6 mb-6">
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fab fa-facebook text-xl"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fab fa-instagram text-xl"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fab fa-linkedin text-xl"></i>
+                </a>
+            </div>
+            <p class="text-gray-500 text-sm">© 2024 Dr. Saurav Bhakat. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
 </html>

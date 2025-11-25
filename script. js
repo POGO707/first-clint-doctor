@@ -1,53 +1,154 @@
-// DOM Content Loaded
+// Configuration - REPLACE WITH YOUR ACTUAL API KEYS
+const CONFIG = {
+    GOOGLE_MAPS_API_KEY: 'YOUR_GOOGLE_MAPS_API_KEY', // Get from https://console.cloud.google.com/
+    GEMINI_API_KEY: 'YOUR_GEMINI_API_KEY', // Get from https://makersuite.google.com/app/apikey
+    CLINIC_LOCATION: {
+        lat: 22.7600, // Barrackpore coordinates
+        lng: 88.3700
+    }
+};
+
+// Data from your original constants
+const SERVICES = [
+    {
+        id: 'emergency',
+        title: 'Emergency & Acute Care',
+        description: 'Rapid assessment and treatment for critical health situations when every second matters. 24/7 emergency consultation available.',
+        features: ['Breathing issues & Asthma', 'Chest pain & Heart attack signs', 'Accidents, Trauma & Fractures', 'Stroke warning symptoms']
+    },
+    {
+        id: 'diabetes',
+        title: 'Advanced Diabetes Management',
+        description: 'Expert diabetes evaluation and treatment using global-standard diabetic care guidelines to prevent long-term complications.',
+        features: ['Type 1 & Type 2 Diabetes', 'Gestational Diabetes', 'Diabetic Foot & Neuropathy', 'Lifestyle & Diet Counseling']
+    },
+    {
+        id: 'critical',
+        title: 'Critical Care Medicine',
+        description: 'Specialized care to stabilize and recover patients from life-threatening medical conditions like sepsis and respiratory failure.',
+        features: ['Respiratory failure', 'Sepsis & severe infections', 'Post-ICU care', 'Constant monitoring']
+    },
+    {
+        id: 'kidney',
+        title: 'Kidney Failure Management',
+        description: 'Integrated care for patients managing kidney disorders alongside diabetes or hypertension to slow damage progression.',
+        features: ['Electrolyte imbalance', 'Slowing kidney damage', 'Collaborative nephrology support', 'Prevention strategies']
+    }
+];
+
+const TESTIMONIALS = [
+    {
+        id: '1',
+        name: 'Arindam G.',
+        location: 'Barrackpore',
+        text: 'I had severe breathing issues and Dr. Bhakat immediately stabilized me. His calm guidance saved my life.',
+        rating: 5
+    },
+    {
+        id: '2',
+        name: 'Sujata D.',
+        location: 'Anandapuri',
+        text: 'My diabetes was uncontrolled for years. With his treatment, I feel healthier and energetic again.',
+        rating: 5
+    },
+    {
+        id: '3',
+        name: 'Suman K.',
+        location: 'Barrackpore Cantonment',
+        text: 'Friendly, knowledgeable, and genuinely caring doctor. Explained everything clearly.',
+        rating: 5
+    },
+    {
+        id: '4',
+        name: 'Priya M.',
+        location: 'Titagarh',
+        text: 'The best clinic for emergency care. The staff is very cooperative and Dr. Bhakat is extremely professional.',
+        rating: 5
+    },
+    {
+        id: '5',
+        name: 'Rahul S.',
+        location: 'Khardaha',
+        text: 'Managed my diabetic foot condition effectively when others gave up. Highly recommended!',
+        rating: 5
+    }
+];
+
+const FAQS = [
+    {
+        question: "Do I need an appointment?",
+        answer: "Walk-ins are accepted for emergencies. Appointments are highly recommended for diabetes management and general consultations to ensure minimal waiting time."
+    },
+    {
+        question: "Do you provide emergency care onsite?",
+        answer: "Yes, we provide rapid evaluation, stabilization, and life-saving interventions onsite before coordinating hospital transfer if necessary."
+    },
+    {
+        question: "Can I manage diabetes with lifestyle changes alone?",
+        answer: "It is possible in the early stages. Dr. Bhakat provides personalized treatment plans that prioritize lifestyle changes, but medication may be needed depending on severity."
+    },
+    {
+        question: "Do you treat kidney-related complications?",
+        answer: "Yes, Dr. Bhakat is certified in the Integrated Kidney Failure Program and specializes in managing kidney disorders related to diabetes and hypertension."
+    },
+    {
+        question: "What are the consultation hours?",
+        answer: "We are open Morning & Evening, Monday through Saturday. Sundays are for emergencies only. Please call to confirm exact availability."
+    }
+];
+
+// Global Variables
+let currentTestimonialIndex = 0;
+let testimonialInterval;
+let aiChatHistory = [];
+let googleMap;
+
+// Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
+    initializeHeader();
+    initializeMobileMenu();
+    initializeTestimonials();
+    initializeFAQ();
+    initializeAppointmentForm();
+    initializeWhatsApp();
+    initializeSmoothScroll();
+    initializeGoogleMap();
+    startTestimonialCarousel();
 });
 
-function initializeApp() {
-    // Initialize all functionality
-    initHeaderScroll();
-    initMobileMenu();
-    initFAQ();
-    initAppointmentForm();
-    initWhatsApp();
-    initSmoothScroll();
-}
-
 // Header Scroll Effect
-function initHeaderScroll() {
+function initializeHeader() {
     const header = document.getElementById('header');
     
     window.addEventListener('scroll', function() {
-        if (window.scrollY > 50) {
-            header.classList.add('header-scrolled');
-            header.classList.remove('bg-transparent', 'py-6');
-            header.classList.add('bg-white', 'shadow-lg', 'py-3');
+        if (window.scrollY > 20) {
+            header.classList.add('bg-primary-900/95', 'backdrop-blur-md', 'shadow-lg', 'py-3');
+            header.classList.remove('bg-transparent', 'py-5');
         } else {
-            header.classList.remove('header-scrolled');
-            header.classList.remove('bg-white', 'shadow-lg', 'py-3');
-            header.classList.add('bg-transparent', 'py-6');
+            header.classList.remove('bg-primary-900/95', 'backdrop-blur-md', 'shadow-lg', 'py-3');
+            header.classList.add('bg-transparent', 'py-5');
         }
     });
 }
 
-// Mobile Menu Toggle
-function initMobileMenu() {
+// Mobile Menu
+function initializeMobileMenu() {
     const mobileMenuButton = document.getElementById('mobileMenuButton');
     const mobileMenu = document.getElementById('mobileMenu');
     const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
 
     mobileMenuButton.addEventListener('click', function() {
         mobileMenu.classList.toggle('hidden');
+        mobileMenu.classList.toggle('animate-slide-down');
     });
 
-    // Close mobile menu when clicking on links
     mobileNavLinks.forEach(link => {
         link.addEventListener('click', function() {
             mobileMenu.classList.add('hidden');
         });
     });
 
-    // Close mobile menu when clicking outside
+    // Close menu when clicking outside
     document.addEventListener('click', function(event) {
         if (!mobileMenu.contains(event.target) && !mobileMenuButton.contains(event.target)) {
             mobileMenu.classList.add('hidden');
@@ -55,45 +156,386 @@ function initMobileMenu() {
     });
 }
 
-// FAQ Toggle
-function initFAQ() {
-    const faqQuestions = document.querySelectorAll('.faq-question');
-    
-    faqQuestions.forEach(question => {
-        question.addEventListener('click', function() {
-            const answer = this.nextElementSibling;
-            const icon = this.querySelector('i');
-            
-            // Toggle current FAQ
-            answer.classList.toggle('hidden');
-            this.classList.toggle('active');
-            
-            // Close other FAQs
-            faqQuestions.forEach(otherQuestion => {
-                if (otherQuestion !== question) {
-                    otherQuestion.nextElementSibling.classList.add('hidden');
-                    otherQuestion.classList.remove('active');
-                }
-            });
-        });
+// Initialize Google Maps
+function initializeGoogleMap() {
+    if (typeof google === 'undefined') {
+        console.error('Google Maps API not loaded. Please check your API key.');
+        return;
+    }
+
+    const mapOptions = {
+        center: CONFIG.CLINIC_LOCATION,
+        zoom: 15,
+        styles: [
+            {
+                "featureType": "all",
+                "elementType": "geometry.fill",
+                "stylers": [{"weight": "2.00"}]
+            },
+            {
+                "featureType": "all",
+                "elementType": "geometry.stroke",
+                "stylers": [{"color": "#9c9c9c"}]
+            },
+            {
+                "featureType": "all",
+                "elementType": "labels.text",
+                "stylers": [{"visibility": "on"}]
+            },
+            {
+                "featureType": "landscape",
+                "elementType": "all",
+                "stylers": [{"color": "#f2f2f2"}]
+            },
+            {
+                "featureType": "landscape",
+                "elementType": "geometry.fill",
+                "stylers": [{"color": "#ffffff"}]
+            },
+            {
+                "featureType": "landscape.man_made",
+                "elementType": "geometry.fill",
+                "stylers": [{"color": "#ffffff"}]
+            },
+            {
+                "featureType": "poi",
+                "elementType": "all",
+                "stylers": [{"visibility": "off"}]
+            },
+            {
+                "featureType": "road",
+                "elementType": "all",
+                "stylers": [{"saturation": -100}, {"lightness": 45}]
+            },
+            {
+                "featureType": "road",
+                "elementType": "geometry.fill",
+                "stylers": [{"color": "#eeeeee"}]
+            },
+            {
+                "featureType": "road",
+                "elementType": "labels.text.fill",
+                "stylers": [{"color": "#7b7b7b"}]
+            },
+            {
+                "featureType": "road",
+                "elementType": "labels.text.stroke",
+                "stylers": [{"color": "#ffffff"}]
+            },
+            {
+                "featureType": "road.highway",
+                "elementType": "all",
+                "stylers": [{"visibility": "simplified"}]
+            },
+            {
+                "featureType": "road.arterial",
+                "elementType": "labels.icon",
+                "stylers": [{"visibility": "off"}]
+            },
+            {
+                "featureType": "transit",
+                "elementType": "all",
+                "stylers": [{"visibility": "off"}]
+            },
+            {
+                "featureType": "water",
+                "elementType": "all",
+                "stylers": [{"color": "#46bcec"}, {"visibility": "on"}]
+            },
+            {
+                "featureType": "water",
+                "elementType": "geometry.fill",
+                "stylers": [{"color": "#c8d7d4"}]
+            },
+            {
+                "featureType": "water",
+                "elementType": "labels.text.fill",
+                "stylers": [{"color": "#070707"}]
+            },
+            {
+                "featureType": "water",
+                "elementType": "labels.text.stroke",
+                "stylers": [{"color": "#ffffff"}]
+            }
+        ]
+    };
+googleMap = new google.maps.Map(document.getElementById('googleMap'), mapOptions);
+
+    // Add marker
+    const marker = new google.maps.Marker({
+        position: CONFIG.CLINIC_LOCATION,
+        map: googleMap,
+        title: 'Dr. Saurav Bhakat Clinic',
+        icon: {
+            url: 'data:image/svg+xml;base64,' + btoa(`
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="16" cy="16" r="16" fill="#06b6d4"/>
+                    <path d="M16 8L18.5 12H13.5L16 8Z" fill="white"/>
+                    <rect x="12" y="12" width="8" height="8" rx="1" fill="white"/>
+                    <path d="M14 16H18V20H14V16Z" fill="#06b6d4"/>
+                </svg>
+            `),
+            scaledSize: new google.maps.Size(40, 40)
+        }
+    });
+
+    // Add info window
+    const infoWindow = new google.maps.InfoWindow({
+        content: `
+            <div class="p-4">
+                <h3 class="font-bold text-lg text-gray-900">Dr. Saurav Bhakat Clinic</h3>
+                <p class="text-gray-600 mt-1">Emergency & Diabetes Care</p>
+                <p class="text-sm text-gray-500 mt-2">State Bank, Paul Pharmacy, Barrackpore</p>
+                <a href="https://maps.google.com/?q=22.7600,88.3700" 
+                   target="_blank" 
+                   class="inline-block mt-2 bg-accent-500 text-white px-3 py-1 rounded text-sm hover:bg-accent-600 transition-colors">
+                    Get Directions
+                </a>
+            </div>
+        `
+    });
+
+    marker.addListener('click', function() {
+        infoWindow.open(googleMap, marker);
     });
 }
 
+// Testimonials Carousel
+function initializeTestimonials() {
+    const carousel = document.getElementById('testimonialCarousel');
+    const dotsContainer = document.getElementById('testimonialDots');
+    
+    // Clear existing content
+    carousel.innerHTML = '';
+    dotsContainer.innerHTML = '';
+    
+    // Create testimonial slides and dots
+    TESTIMONIALS.forEach((testimonial, index) => {
+        // Create slide
+        const slide = document.createElement('div');
+        slide.className = 'w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-4';
+        slide.innerHTML = `
+            <div class="bg-white/5 backdrop-blur-md p-8 rounded-2xl border border-white/10 hover:bg-white/10 transition duration-300 h-full flex flex-col justify-between">
+                <div>
+                    <div class="flex gap-1 text-yellow-400 mb-6">
+                        ${'<i class="fas fa-star"></i>'.repeat(testimonial.rating)}
+                    </div>
+                    <p class="text-gray-100 text-lg italic mb-8 leading-relaxed">"${testimonial.text}"</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-accent-500 rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">
+                        ${testimonial.name.charAt(0)}
+                    </div>
+                    <div>
+                        <h5 class="font-bold text-white">${testimonial.name}</h5>
+                        <p class="text-sm text-primary-200 flex items-center gap-1">
+                            <i class="fas fa-map-marker-alt"></i> ${testimonial.location}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        `;
+        carousel.appendChild(slide);
+        
+        // Create dot
+        const dot = document.createElement('button');
+        dot.className = `w-3 h-3 rounded-full transition-all ${index === 0 ? 'bg-accent-500 w-8' : 'bg-white/30 hover:bg-white/50'}`;
+        dot.setAttribute('onclick', `goToTestimonial(${index})`);
+        dot.setAttribute('aria-label', `Go to testimonial ${index + 1}`);
+        dotsContainer.appendChild(dot);
+    });
+}
+
+function startTestimonialCarousel() {
+    testimonialInterval = setInterval(() => {
+        nextTestimonial();
+    }, 4000);
+}
+
+function nextTestimonial() {
+    currentTestimonialIndex = (currentTestimonialIndex + 1) % TESTIMONIALS.length;
+    updateTestimonialDisplay();
+}
+
+function prevTestimonial() {
+    currentTestimonialIndex = (currentTestimonialIndex - 1 + TESTIMONIALS.length) % TESTIMONIALS.length;
+    updateTestimonialDisplay();
+}
+
+function goToTestimonial(index) {
+    currentTestimonialIndex = index;
+    updateTestimonialDisplay();
+}
+
+function updateTestimonialDisplay() {
+    const carousel = document.getElementById('testimonialCarousel');
+    const dots = document.querySelectorAll('#testimonialDots button');
+    const itemsPerView = window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
+    const translateX = -currentTestimonialIndex * (100 / itemsPerView);
+    
+    carousel.style.transform = `translateX(${translateX}%)`;
+    
+    // Update dots
+    dots.forEach((dot, index) => {
+        if (index === currentTestimonialIndex) {
+            dot.classList.add('bg-accent-500', 'w-8');
+            dot.classList.remove('bg-white/30', 'w-3');
+        } else {
+            dot.classList.remove('bg-accent-500', 'w-8');
+            dot.classList.add('bg-white/30', 'w-3');
+        }
+    });
+}
+
+// FAQ Accordion
+function initializeFAQ() {
+    const faqContainer = document.getElementById('faqContainer');
+    
+    FAQS.forEach((faq, index) => {
+        const faqItem = document.createElement('div');
+        faqItem.className = `border rounded-xl overflow-hidden transition-all duration-300 border-gray-200`;
+        faqItem.innerHTML = `
+            <button
+                onclick="toggleFAQ(${index})"
+                class="w-full px-8 py-6 flex justify-between items-center bg-white hover:bg-gray-50 transition text-left"
+            >
+                <span class="font-bold text-lg text-gray-800">${faq.question}</span>
+                <i class="fas fa-chevron-down text-gray-400"></i>
+            </button>
+            <div class="faq-content transition-all duration-300 overflow-hidden max-h-0 opacity-0">
+                <div class="px-8 py-6 bg-primary-50/50 text-gray-600 border-t border-gray-100 leading-relaxed">
+                    ${faq.answer}
+                </div>
+            </div>
+        `;
+        faqContainer.appendChild(faqItem);
+    });
+}
+
+function toggleFAQ(index) {
+    const faqItems = document.querySelectorAll('#faqContainer > div');
+    const currentFaq = faqItems[index];
+    const content = currentFaq.querySelector('.faq-content');
+    const button = currentFaq.querySelector('button');
+    const icon = currentFaq.querySelector('i');
+    
+    // Close all other FAQs
+    faqItems.forEach((item, i) => {
+        if (i !== index) {
+            const otherContent = item.querySelector('.faq-content');
+            const otherButton = item.querySelector('button span');
+            const otherIcon = item.querySelector('i');
+            
+            otherContent.classList.add('max-h-0', 'opacity-0');
+            otherContent.classList.remove('max-h-96', 'opacity-100');
+            otherButton.classList.remove('text-primary-700');
+            otherIcon.classList.remove('fa-chevron-up', 'text-primary-600');
+            otherIcon.classList.add('fa-chevron-down', 'text-gray-400');
+            item.classList.remove('border-primary-200', 'shadow-md');
+        }
+    });
+    
+    // Toggle current FAQ
+    if (content.classList.contains('max-h-0')) {
+        content.classList.remove('max-h-0', 'opacity-0');
+        content.classList.add('max-h-96', 'opacity-100');
+        button.querySelector('span').classList.add('text-primary-700');
+        icon.classList.remove('fa-chevron-down', 'text-gray-400');
+        icon.classList.add('fa-chevron-up', 'text-primary-600');
+        currentFaq.classList.add('border-primary-200', 'shadow-md');
+    } else {
+        content.classList.add('max-h-0', 'opacity-0');
+        content.classList.remove('max-h-96', 'opacity-100');
+        button.querySelector('span').classList.remove('text-primary-700');
+        icon.classList.remove('fa-chevron-up', 'text-primary-600');
+        icon.classList.add('fa-chevron-down', 'text-gray-400');
+        currentFaq.classList.remove('border-primary-200', 'shadow-md');
+    }
+}
+
+// Appointment Form
+function initializeAppointmentForm() {
+    const form = document.getElementById('appointmentForm');
+    const submitButton = document.getElementById('submitButton');
+    
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(form);
+        const appointmentData = {
+            name: formData.get('name'),
+            phone: formData.get('phone'),
+            reason: formData.get('reason'),
+            slot: formData.get('slot'),
+            notes: formData.get('notes'),
+            timestamp: new Date().toISOString()
+        };
+        
+        // Show loading state
+        submitButton.innerHTML = 'Processing...';
+        submitButton.disabled = true;
+        
+        try {
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Show success message
+            document.getElementById('formSuccess').classList.remove('hidden');
+            form.classList.add('hidden');
+            
+            // Here you would typically send data to your backend
+            console.log('Appointment booked:', appointmentData);
+            
+            // Send notification (you can integrate with your preferred service)
+            sendAppointmentNotification(appointmentData);
+            
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Sorry, there was an error. Please try again or call us directly.');
+        } finally {
+            submitButton.innerHTML = 'Confirm Appointment Request <i class="fas fa-arrow-right"></i>';
+            submitButton.disabled = false;
+        }
+    });
+}
+
+function resetForm() {
+    document.getElementById('formSuccess').classList.add('hidden');
+    document.getElementById('appointmentForm').classList.remove('hidden');
+    document.getElementById('appointmentForm').reset();
+}
+
+function sendAppointmentNotification(appointmentData) {
+    // This is where you would integrate with:
+    // - Twilio for SMS
+    // - Email service for emails
+    // - Notion API for database storage
+    // - Your custom backend
+    
+    console.log('Sending notification for appointment:', appointmentData);
+    
+    // Example: Send to backend API
+    fetch('/api/appointments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(appointmentData)
+    }).catch(error => console.error('Failed to send notification:', error));
+}
+
 // WhatsApp Integration
-function initWhatsApp() {
+function initializeWhatsApp() {
     const whatsappButton = document.getElementById('whatsappButton');
-    const phoneNumber = '919876543210'; // Without +
+    const phoneNumber = '919876543210';
     const defaultMessage = 'Hello, I would like to book an appointment with Dr. Saurav Bhakat.';
     
     whatsappButton.addEventListener('click', function() {
         const encodedMessage = encodeURIComponent(defaultMessage);
-        const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-        window.open(whatsappURL, '_blank');
+        window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
     });
 }
 
-// Smooth Scroll for Navigation Links
-function initSmoothScroll() {
+// Smooth Scroll
+function initializeSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -108,149 +550,267 @@ function initSmoothScroll() {
     });
 }
 
-// Appointment Form Handling
-function initAppointmentForm() {
-    const appointmentForm = document.getElementById('appointmentForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const successMessage = document.getElementById('successMessage');
+// 360 Viewer Modal
+function openViewer360() {
+    document.getElementById('viewer360').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeViewer360() {
+    document.getElementById('viewer360').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+// AI Chat Modal with Real Gemini API
+function openAIModal() {
+    document.getElementById('aiModal').classList.remove('hidden');
+    document.getElementById('aiModal').classList.add('animate-fade-in');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeAIModal() {
+    document.getElementById('aiModal').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+function handleAIKeydown(event) {
+    if (event.key === 'Enter') {
+        sendAIMessage();
+    }
+}
+
+async function sendAIMessage() {
+    const input = document.getElementById('aiInput');
+    const message = input.value.trim();
     
-    appointmentForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        // Get form data
-        const formData = {
-            name: document.getElementById('name').value,
-            phone: document.getElementById('phone').value,
-            reason: document.getElementById('reason').value,
-            slot: document.getElementById('slot').value,
-            notes: document.getElementById('notes').value,
-            timestamp: new Date().toISOString()
-        };
-        
-        // Show loading state
-        submitBtn.innerHTML = '<div class="spinner"></div> Processing...';
-        submitBtn.disabled = true;
-        
-        try {
-            // Simulate API call (replace with actual API endpoint)
-            await submitAppointment(formData);
-            
-            // Show success message
-            appointmentForm.classList.add('hidden');
-            successMessage.classList.remove('hidden');
-            
-            // Send notification (you can integrate with your preferred service)
-            sendNotification(formData);
-            
-        } catch (error) {
-            console.error('Error submitting appointment:', error);
-            alert('Sorry, there was an error submitting your appointment. Please try again or call us directly.');
-        } finally {
-            // Reset button state
-            submitBtn.innerHTML = 'Confirm Appointment Request <i class="fas fa-arrow-right"></i>';
-            submitBtn.disabled = false;
+    if (!message) return;
+    
+    // Add user message to chat
+    addChatMessage('user', message);
+    input.value = '';
+    
+    // Disable send button and show loading
+    const sendButton = document.getElementById('aiSendButton');
+    sendButton.disabled = true;
+    sendButton.innerHTML = '<i class="fas fa-ellipsis-h"></i>';
+    
+    // Add loading message
+    const loadingId = addLoadingMessage();
+    
+    try {
+        const response = await callGeminiAPI(message);
+        removeLoadingMessage(loadingId);
+        addChatMessage('model', response);
+    } catch (error) {
+        removeLoadingMessage(loadingId);
+        addChatMessage('model', 'I apologize, but I am having trouble connecting right now. Please try again later or contact the clinic directly.');
+        console.error('AI API Error:', error);
+    } finally {
+        // Re-enable send button
+        sendButton.disabled = false;
+        sendButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
+    }
+}
+
+async function callGeminiAPI(userMessage) {
+    if (!CONFIG.GEMINI_API_KEY || CONFIG.GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY') {
+        // Fallback to simulated responses if no API key
+        return getSimulatedResponse(userMessage);
+    }
+
+    const systemPrompt = `You are the AI Health Assistant for Dr. Saurav Bhakat's medical practice in Barrackpore, West Bengal.
+Location: State Bank, Paul Pharmacy, Old Calcutta Rd, beside Anandapuri, Barrackpore, West Bengal 700123.
+Specialties: Emergency Medicine, Diabetes Care, Critical Care, and Kidney Failure Management.
+
+Your Goal: Assist patients by answering questions about services, hours, and general medical information based on standard knowledge.
+Key Info:
+- Dr. Bhakat has 5+ years of experience.
+- He is certified in Emergency Medicine (CCEPC) and Advanced Diabetes Management (ADA, USA).
+- Clinic handles emergencies (breathing issues, chest pain) and chronic disease management.
+- For emergencies, ALWAYS tell the user to call the clinic immediately or go to the nearest hospital.
+
+Disclaimer: You are an AI, not a doctor. Do not provide specific medical diagnoses. Always advise consulting Dr. Bhakat for personal medical advice.
+
+Keep responses helpful, concise, and professional.`;
+
+    try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${CONFIG.GEMINI_API_KEY}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{
+                        text: `${systemPrompt}\n\nUser Question: ${userMessage}`
+                    }]
+                }],
+                generationConfig: {
+                    temperature: 0.7,
+                    maxOutputTokens: 500,
+                }
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
         }
-    });
+
+        const data = await response.json();
+        return data.candidates[0].content.parts[0].text;
+    } catch (error) {
+        console.error('Gemini API call failed:', error);
+        return getSimulatedResponse(userMessage);
+    }
 }
 
-// Simulate API call for appointment submission
-async function submitAppointment(formData) {
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
+function getSimulatedResponse(userMessage) {
+    const message = userMessage.toLowerCase();
     
-    // Here you would typically send data to your backend
-    console.log('Appointment Data:', formData);
+    if (message.includes('hello') || message.includes('hi') || message.includes('hey')) {
+        return "Hello! I'm Dr. Bhakat's AI assistant. How can I help you today regarding our medical services?";
+    } else if (message.includes('emergency') || message.includes('urgent')) {
+        return "For emergencies like breathing difficulties, chest pain, or severe injuries, please call us immediately at +91 98765 43210 or visit the nearest hospital. We prioritize emergency cases.";
+    } else if (message.includes('diabetes')) {
+        return "We provide comprehensive diabetes care including Type 1 & Type 2 management, gestational diabetes care, and lifestyle counseling. Dr. Bhakat is certified in advanced diabetes management from ADA (USA).";
+    } else if (message.includes('hour') || message.includes('time')) {
+        return "Clinic hours are Monday to Saturday: Morning (10 AM - 1 PM) and Evening (5 PM - 9 PM). Sundays are for emergencies only. Emergency care is available 24/7.";
+    } else if (message.includes('location') || message.includes('address')) {
+        return "We're located at: State Bank, Paul Pharmacy, Old Calcutta Rd, beside Anandapuri, Barrackpore, West Bengal 700123";
+    } else if (message.includes('service') || message.includes('treatment')) {
+        return "We specialize in Emergency Medicine, Diabetes Care, Critical Care, and Kidney Failure Management. Our services include 24/7 emergency consultation and comprehensive chronic disease management.";
+    } else {
+        return "Thank you for your question. For detailed medical advice or specific health concerns, I recommend consulting directly with Dr. Bhakat. You can book an appointment through our website or call us at +91 98765 43210.";
+    }
+}
+
+function addLoadingMessage() {
+    const chatMessages = document.getElementById('chatMessages');
+    const loadingDiv = document.createElement('div');
+    const loadingId = 'loading-' + Date.now();
     
-    // For demo purposes, we'll just log to console
-    // In production, replace with actual API call:
-    /*
-    const response = await fetch('/api/appointments', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-    });
+    loadingDiv.id = loadingId;
+    loadingDiv.className = 'flex justify-start';
+    loadingDiv.innerHTML = `
+        <div class="flex gap-2 max-w-[85%]">
+            <div class="w-8 h-8 rounded-full bg-accent-100 text-accent-700 flex items-center justify-center">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div class="bg-white border border-gray-200 p-3 rounded-2xl rounded-tl-none shadow-sm">
+                <div class="flex gap-1">
+                    <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
+                    <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-75"></span>
+                    <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-150"></span>
+                </div>
+            </div>
+        </div>
+    `;
     
-    if (!response.ok) {
-        throw new Error('Failed to submit appointment');
+    chatMessages.appendChild(loadingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    return loadingId;
+}
+
+function removeLoadingMessage(loadingId) {
+    const loadingElement = document.getElementById(loadingId);
+    if (loadingElement) {
+        loadingElement.remove();
+    }
+}
+
+function addChatMessage(role, text) {
+    const chatMessages = document.getElementById('chatMessages');
+    const messageDiv = document.createElement('div');
+    
+    if (role === 'user') {
+        messageDiv.className = 'flex justify-end';
+        messageDiv.innerHTML = `
+            <div class="flex gap-2 max-w-[85%] flex-row-reverse">
+                <div class="w-8 h-8 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="p-3 rounded-2xl rounded-tr-none bg-primary-600 text-white">
+                    ${text}
+                </div>
+            </div>
+        `;
+    } else {
+        messageDiv.className = 'flex justify-start';
+        messageDiv.innerHTML = `
+            <div class="flex gap-2 max-w-[85%]">
+                <div class="w-8 h-8 rounded-full bg-accent-100 text-accent-700 flex items-center justify-center">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="p-3 rounded-2xl rounded-tl-none bg-white border border-gray-200 text-gray-800 shadow-sm">
+                    ${text}
+                </div>
+            </div>
+        `;
     }
     
-    return response.json();
-    */
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
     
-    return { success: true, message: 'Appointment submitted successfully' };
+    // Add to history
+    aiChatHistory.push({ role, text, timestamp: new Date() });
 }
 
-// Send notification (integrate with your preferred service)
-function sendNotification(formData) {
-    // Example: Send email or SMS notification
-    // You can integrate with:
-    // - EmailJS for emails
-    // - Twilio for SMS
-    // - Firebase for push notifications
-    // - Your custom backend API
-    
-    console.log('Sending notification for:', formData);
-    
-    // Example using EmailJS (you'll need to set this up):
-    /*
-    emailjs.send('service_id', 'template_id', {
-        patient_name: formData.name,
-        patient_phone: formData.phone,
-        reason: formData.reason,
-        slot: formData.slot,
-        notes: formData.notes
-    });
-    */
-}
-
-// Reset form function
-function resetForm() {
-    const appointmentForm = document.getElementById('appointmentForm');
-    const successMessage = document.getElementById('successMessage');
-    
-    appointmentForm.classList.remove('hidden');
-    successMessage.classList.add('hidden');
-    appointmentForm.reset();
-}
-
-// Utility function to format phone number
-function formatPhoneNumber(phone) {
-    const cleaned = ('' + phone).replace(/\D/g, '');
-    const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-    if (match) {
-        return '(' + match[1] + ') ' + match[2] + '-' + match[3];
+// Handle window resize for testimonials and map
+window.addEventListener('resize', function() {
+    updateTestimonialDisplay();
+    if (googleMap) {
+        setTimeout(() => {
+            google.maps.event.trigger(googleMap, 'resize');
+        }, 300);
     }
-    return phone;
-}
+});
 
-// Utility function to validate email
-function validateEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-}
-
-// Utility function to validate phone
-function validatePhone(phone) {
-    const re = /^[\+]?[1-9][\d]{0,15}$/;
-    return re.test(phone.replace(/\D/g, ''));
-}```
-
-4. package.json (Simple version)
-
-```json
-{
-  "name": "dr-bhakat-website",
-  "version": "1.0.0",
-  "description": "Medical website for Dr. Saurav Bhakat",
-  "main": "index.html",
-  "scripts": {
-    "start": "python -m http.server 8000",
-    "serve": "npx http-server . -p 8000"
-  },
-  "keywords": ["medical", "website", "doctor"],
-  "author": "Dr. Saurav Bhakat",
-  "license": "MIT"
-}
+// Add some CSS for the background pattern
+const style = document.createElement('style');
+style.textContent = `
+    .bg-pattern {
+        background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    
+    .delay-100 { animation-delay: 100ms; }
+    .delay-200 { animation-delay: 200ms; }
+    .delay-300 { animation-delay: 300ms; }
+    
+    .gm-style .gm-style-iw-c {
+        border-radius: 12px;
+        padding: 0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    .gm-style .gm-style-iw-t::after {
+        background: linear-gradient(45deg, #06b6d4, #3b82f6);
+    }
+`;
+document.head.appendChild(style);
 ```
+
+3. config.js (API Configuration)
+
+```javascript
+// Configuration file - REPLACE WITH YOUR ACTUAL API KEYS
+const CONFIG = {
+    // Get from: https://console.cloud.google.com/google/maps-apis/
+    GOOGLE_MAPS_API_KEY: 'YOUR_GOOGLE_MAPS_API_KEY',
+    
+    // Get from: https://makersuite.google.com/app/apikey
+    GEMINI_API_KEY: 'YOUR_GEMINI_API_KEY',
+    
+    // Clinic location coordinates
+    CLINIC_LOCATION: {
+        lat: 22.7600, // Barrackpore, West Bengal
+        lng: 88.3700
+    },
+    
+    // Contact information
+    CONTACT: {
+        phone: '+919876543210',
+        whatsapp: '919876543210',
+        address: 'State Bank, Paul Pharmacy, Old Calcutta Rd, beside Anandapuri, Barrackpore, West Bengal 700123'
+    }
+};

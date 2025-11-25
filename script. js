@@ -1,0 +1,256 @@
+// DOM Content Loaded
+document.addEventListener('DOMContentLoaded', function() {
+    initializeApp();
+});
+
+function initializeApp() {
+    // Initialize all functionality
+    initHeaderScroll();
+    initMobileMenu();
+    initFAQ();
+    initAppointmentForm();
+    initWhatsApp();
+    initSmoothScroll();
+}
+
+// Header Scroll Effect
+function initHeaderScroll() {
+    const header = document.getElementById('header');
+    
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+            header.classList.add('header-scrolled');
+            header.classList.remove('bg-transparent', 'py-6');
+            header.classList.add('bg-white', 'shadow-lg', 'py-3');
+        } else {
+            header.classList.remove('header-scrolled');
+            header.classList.remove('bg-white', 'shadow-lg', 'py-3');
+            header.classList.add('bg-transparent', 'py-6');
+        }
+    });
+}
+
+// Mobile Menu Toggle
+function initMobileMenu() {
+    const mobileMenuButton = document.getElementById('mobileMenuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+    mobileMenuButton.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // Close mobile menu when clicking on links
+    mobileNavLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            mobileMenu.classList.add('hidden');
+        });
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!mobileMenu.contains(event.target) && !mobileMenuButton.contains(event.target)) {
+            mobileMenu.classList.add('hidden');
+        }
+    });
+}
+
+// FAQ Toggle
+function initFAQ() {
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', function() {
+            const answer = this.nextElementSibling;
+            const icon = this.querySelector('i');
+            
+            // Toggle current FAQ
+            answer.classList.toggle('hidden');
+            this.classList.toggle('active');
+            
+            // Close other FAQs
+            faqQuestions.forEach(otherQuestion => {
+                if (otherQuestion !== question) {
+                    otherQuestion.nextElementSibling.classList.add('hidden');
+                    otherQuestion.classList.remove('active');
+                }
+            });
+        });
+    });
+}
+
+// WhatsApp Integration
+function initWhatsApp() {
+    const whatsappButton = document.getElementById('whatsappButton');
+    const phoneNumber = '919876543210'; // Without +
+    const defaultMessage = 'Hello, I would like to book an appointment with Dr. Saurav Bhakat.';
+    
+    whatsappButton.addEventListener('click', function() {
+        const encodedMessage = encodeURIComponent(defaultMessage);
+        const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+        window.open(whatsappURL, '_blank');
+    });
+}
+
+// Smooth Scroll for Navigation Links
+function initSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+}
+
+// Appointment Form Handling
+function initAppointmentForm() {
+    const appointmentForm = document.getElementById('appointmentForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const successMessage = document.getElementById('successMessage');
+    
+    appointmentForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Get form data
+        const formData = {
+            name: document.getElementById('name').value,
+            phone: document.getElementById('phone').value,
+            reason: document.getElementById('reason').value,
+            slot: document.getElementById('slot').value,
+            notes: document.getElementById('notes').value,
+            timestamp: new Date().toISOString()
+        };
+        
+        // Show loading state
+        submitBtn.innerHTML = '<div class="spinner"></div> Processing...';
+        submitBtn.disabled = true;
+        
+        try {
+            // Simulate API call (replace with actual API endpoint)
+            await submitAppointment(formData);
+            
+            // Show success message
+            appointmentForm.classList.add('hidden');
+            successMessage.classList.remove('hidden');
+            
+            // Send notification (you can integrate with your preferred service)
+            sendNotification(formData);
+            
+        } catch (error) {
+            console.error('Error submitting appointment:', error);
+            alert('Sorry, there was an error submitting your appointment. Please try again or call us directly.');
+        } finally {
+            // Reset button state
+            submitBtn.innerHTML = 'Confirm Appointment Request <i class="fas fa-arrow-right"></i>';
+            submitBtn.disabled = false;
+        }
+    });
+}
+
+// Simulate API call for appointment submission
+async function submitAppointment(formData) {
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Here you would typically send data to your backend
+    console.log('Appointment Data:', formData);
+    
+    // For demo purposes, we'll just log to console
+    // In production, replace with actual API call:
+    /*
+    const response = await fetch('/api/appointments', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+    });
+    
+    if (!response.ok) {
+        throw new Error('Failed to submit appointment');
+    }
+    
+    return response.json();
+    */
+    
+    return { success: true, message: 'Appointment submitted successfully' };
+}
+
+// Send notification (integrate with your preferred service)
+function sendNotification(formData) {
+    // Example: Send email or SMS notification
+    // You can integrate with:
+    // - EmailJS for emails
+    // - Twilio for SMS
+    // - Firebase for push notifications
+    // - Your custom backend API
+    
+    console.log('Sending notification for:', formData);
+    
+    // Example using EmailJS (you'll need to set this up):
+    /*
+    emailjs.send('service_id', 'template_id', {
+        patient_name: formData.name,
+        patient_phone: formData.phone,
+        reason: formData.reason,
+        slot: formData.slot,
+        notes: formData.notes
+    });
+    */
+}
+
+// Reset form function
+function resetForm() {
+    const appointmentForm = document.getElementById('appointmentForm');
+    const successMessage = document.getElementById('successMessage');
+    
+    appointmentForm.classList.remove('hidden');
+    successMessage.classList.add('hidden');
+    appointmentForm.reset();
+}
+
+// Utility function to format phone number
+function formatPhoneNumber(phone) {
+    const cleaned = ('' + phone).replace(/\D/g, '');
+    const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+        return '(' + match[1] + ') ' + match[2] + '-' + match[3];
+    }
+    return phone;
+}
+
+// Utility function to validate email
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+// Utility function to validate phone
+function validatePhone(phone) {
+    const re = /^[\+]?[1-9][\d]{0,15}$/;
+    return re.test(phone.replace(/\D/g, ''));
+}```
+
+4. package.json (Simple version)
+
+```json
+{
+  "name": "dr-bhakat-website",
+  "version": "1.0.0",
+  "description": "Medical website for Dr. Saurav Bhakat",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "serve": "npx http-server . -p 8000"
+  },
+  "keywords": ["medical", "website", "doctor"],
+  "author": "Dr. Saurav Bhakat",
+  "license": "MIT"
+}
+```
